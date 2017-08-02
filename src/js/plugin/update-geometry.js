@@ -50,6 +50,26 @@ function updateCss(element, i) {
   dom.css(i.scrollbarY, {top: i.scrollbarYTop, height: i.scrollbarYHeight - i.railBorderYWidth});
 }
 
+function updateShadowCss(element, i) {
+  var shadowYTop = {width: i.railXWidth};
+  var shadowYBottom = {width: i.railXWidth};
+  shadowYTop.left = element.scrollLeft;
+  shadowYBottom.left = element.scrollLeft;
+  shadowYTop.top = i.scrollbarXTop + element.scrollTop;
+  shadowYBottom.bottom = i.scrollbarXBottom - element.scrollTop;
+
+  dom.css(i.shadowYTop, shadowYTop);
+  dom.css(i.shadowYBottom, shadowYBottom);
+
+  var shadowXLeft = {top: element.scrollTop, height: i.railYHeight};
+  var shadowXRight = {top: element.scrollTop, height: i.railYHeight};
+  shadowXLeft.left = i.scrollbarYLeft + element.scrollLeft;
+  shadowXRight.right = i.scrollbarYRight - element.scrollLeft;
+
+  dom.css(i.shadowXLeft, shadowXLeft);
+  dom.css(i.shadowXRight, shadowXRight);
+}
+
 module.exports = function (element) {
   var i = instances.get(element);
 
@@ -106,6 +126,9 @@ module.exports = function (element) {
   }
 
   updateCss(element, i);
+  if (i.settings.scrollAwareShadows) {
+    updateShadowCss(element, i);
+  }
 
   if (i.scrollbarXActive) {
     cls.add(element, 'ps-active-x');
@@ -123,4 +146,6 @@ module.exports = function (element) {
     i.scrollbarYTop = 0;
     updateScroll(element, 'top', 0);
   }
+
+
 };

@@ -15,6 +15,7 @@ var handlers = {
   'selection': require('./handler/selection')
 };
 var nativeScrollHandler = require('./handler/native-scroll');
+var bindReachStartEndEventshandler = require('./handler/shadows');
 
 module.exports = function (element, userSettings) {
   userSettings = typeof userSettings === 'object' ? userSettings : {};
@@ -32,6 +33,10 @@ module.exports = function (element, userSettings) {
   });
 
   nativeScrollHandler(element);
+
+  if (i.settings.scrollAwareShadows) {
+    bindReachStartEndEventshandler(element);
+  }
 
   updateGeometry(element);
 };

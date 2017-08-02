@@ -76,6 +76,14 @@ function Instance(element) {
   dom.css(i.scrollbarYRail, 'display', '');
   i.railYHeight = null;
   i.railYRatio = null;
+
+
+  // Shadows
+  i.shadowXLeft = dom.appendTo(dom.e('div', 'ps-shadow-x-left'), element);
+  i.shadowXRight = dom.appendTo(dom.e('div', 'ps-shadow-x-right'), element);
+  i.shadowYTop = dom.appendTo(dom.e('div', 'ps-shadow-y-top'), element);
+  i.shadowYBottom = dom.appendTo(dom.e('div', 'ps-shadow-y-bottom'), element);
+
 }
 
 function getId(element) {

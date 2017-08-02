@@ -41,6 +41,54 @@
   }
 }
 
+@mixin shadow-default() {
+  display: none;
+  pointer-events: none;
+  position: absolute;
+  transition: box-shadow .4s linear;
+}
+
+@mixin shadow-top() {
+  @include shadow-default();
+  box-shadow:$ps-shadow-box-top-inactive;
+  height:$ps-shadow-width;
+}
+@mixin shadow-right() {
+  @include shadow-default();
+  box-shadow:$ps-shadow-box-right-inactive;
+  width:$ps-shadow-width;
+}
+@mixin shadow-bottom() {
+  @include shadow-default();
+  box-shadow:$ps-shadow-box-bottom-inactive;
+  height:$ps-shadow-width;
+}
+@mixin shadow-left() {
+  @include shadow-default();
+  box-shadow:$ps-shadow-box-left-inactive;
+  width:$ps-shadow-width;
+}
+@mixin shadow-top-active() {
+  @include shadow-default();
+  box-shadow:$ps-shadow-box-top;
+  height:$ps-shadow-width;
+}
+@mixin shadow-right-active() {
+  @include shadow-default();
+  box-shadow:$ps-shadow-box-right;
+  width:$ps-shadow-width;
+}
+@mixin shadow-bottom-active() {
+  @include shadow-default();
+  box-shadow:$ps-shadow-box-bottom;
+  height:$ps-shadow-width;
+}
+@mixin shadow-left-active() {
+  @include shadow-default();
+  box-shadow:$ps-shadow-box-left;
+  width:$ps-shadow-width;
+}
+
 // Layout and theme mixin
 @mixin ps-container($theme) {
   -ms-touch-action: auto;
@@ -61,6 +109,13 @@
   &.ps-active-y > .ps-scrollbar-y-rail {
     display: block;
     background-color: map_get($theme, bar-bg);
+  }
+
+  &.ps-active-x > .ps-shadow-x-left,
+  &.ps-active-x > .ps-shadow-x-right,
+  &.ps-active-y > .ps-shadow-y-top,
+  &.ps-active-y > .ps-shadow-y-bottom {
+    display: block !important;
   }
 
   @include in-scrolling($theme);
@@ -99,6 +154,31 @@
         width: map_get($theme, scrollbar-y-hover-width);
       }
     }
+  }
+
+  &.ps-active-x > .ps-shadow-x-left{
+    @include shadow-left();
+  }
+  &.ps-active-x > .ps-shadow-x-right{
+    @include shadow-right();
+  }
+  &.ps-active-y > .ps-shadow-y-top{
+    @include shadow-top();
+  }
+  &.ps-active-y > .ps-shadow-y-bottom{
+    @include shadow-bottom();
+  }
+  &.ps-active-x.ps-x-reach-start-more > .ps-shadow-x-left{
+    @include shadow-left-active();
+  }
+  &.ps-active-x.ps-x-reach-end-more > .ps-shadow-x-right{
+    @include shadow-right-active();
+  }
+  &.ps-active-y.ps-y-reach-start-more > .ps-shadow-y-top{
+    @include shadow-top-active();
+  }
+  &.ps-active-y.ps-y-reach-end-more > .ps-shadow-y-bottom{
+    @include shadow-bottom-active();
   }
 
   &:hover {

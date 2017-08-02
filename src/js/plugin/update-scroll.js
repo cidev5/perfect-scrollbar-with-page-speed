@@ -27,11 +27,15 @@ module.exports = function (element, axis, value) {
   if (axis === 'top' && value <= 0) {
     element.scrollTop = value = 0; // don't allow negative scroll
     element.dispatchEvent(createDOMEvent('ps-y-reach-start'));
+  } else {
+    element.dispatchEvent(createDOMEvent('ps-y-reach-start-more'));
   }
 
   if (axis === 'left' && value <= 0) {
     element.scrollLeft = value = 0; // don't allow negative scroll
     element.dispatchEvent(createDOMEvent('ps-x-reach-start'));
+  } else {
+    element.dispatchEvent(createDOMEvent('ps-x-reach-start-more'));
   }
 
   var i = instances.get(element);
@@ -46,6 +50,8 @@ module.exports = function (element, axis, value) {
       element.scrollTop = value;
     }
     element.dispatchEvent(createDOMEvent('ps-y-reach-end'));
+  } else {
+    element.dispatchEvent(createDOMEvent('ps-y-reach-end-more'));
   }
 
   if (axis === 'left' && value >= i.contentWidth - i.containerWidth) {
@@ -58,6 +64,8 @@ module.exports = function (element, axis, value) {
       element.scrollLeft = value;
     }
     element.dispatchEvent(createDOMEvent('ps-x-reach-end'));
+  } else {
+    element.dispatchEvent(createDOMEvent('ps-x-reach-end-more'));
   }
 
   if (!lastTop) {
