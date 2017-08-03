@@ -1,21 +1,21 @@
 {
   "name": "@dawid84/perfect-scrollbar-with-page-speed",
-  "version": "0.6.16",
+  "version": "0.6.20",
   "description": "Minimalistic but perfect custom scrollbar plugin",
   "author": "Hyunje Jun <me@noraesae.net>",
   "contributors": [
     {
-      "name": "Hyunje Jun",
-      "email": "me@noraesae.net"
+      "name": "Dawid Pawelec",
+      "email": "dawid@pawelecweb.com"
     }
   ],
   "main": "./index.js",
   "repository": {
     "type": "git",
-    "url": "https://github.com/dawid84/perfect-scrollbar"
+    "url": "https://github.com/dawid84/perfect-scrollbar-with-page-speed"
   },
   "bugs": {
-    "url": "https://github.com/dawid84/perfect-scrollbar/issues"
+    "url": "https://github.com/dawid84/perfect-scrollbar-with-page-speed/issues"
   },
   "keywords": [
     "jquery-plugin",
