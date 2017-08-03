@@ -111,6 +111,13 @@
     background-color: map_get($theme, bar-bg);
   }
 
+  > .ps-shadow-x-left,
+  > .ps-shadow-x-right,
+  > .ps-shadow-y-top,
+  > .ps-shadow-y-bottom {
+    display: none;
+  }
+
   &.ps-active-x > .ps-shadow-x-left,
   &.ps-active-x > .ps-shadow-x-right,
   &.ps-active-y > .ps-shadow-y-top,
