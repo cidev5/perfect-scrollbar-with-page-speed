@@ -51,8 +51,9 @@ function updateCss(element, i) {
 }
 
 function updateShadowCss(element, i) {
-  var shadowYTop = {width: i.railXWidth};
-  var shadowYBottom = {width: i.railXWidth};
+  var width = _.toInt(dom.css(element, 'width'));
+  var shadowYTop = {width: width};
+  var shadowYBottom = {width: width};
   shadowYTop.left = element.scrollLeft;
   shadowYBottom.left = element.scrollLeft;
   shadowYTop.top = _.toInt(dom.css(i.scrollbarYRail, 'top'));
@@ -61,8 +62,9 @@ function updateShadowCss(element, i) {
   dom.css(i.shadowYTop, shadowYTop);
   dom.css(i.shadowYBottom, shadowYBottom);
 
-  var shadowXLeft = {top: element.scrollTop, height: i.railYHeight};
-  var shadowXRight = {top: element.scrollTop, height: i.railYHeight};
+  var height = _.toInt(dom.css(element, 'height'));
+  var shadowXLeft = {top: element.scrollTop, height: height};
+  var shadowXRight = {top: element.scrollTop, height: height};
   shadowXLeft.left = _.toInt(dom.css(i.scrollbarXRail, 'left'));
   shadowXRight.right = -element.scrollLeft;
 
