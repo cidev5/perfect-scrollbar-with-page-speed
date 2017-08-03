@@ -23,49 +23,50 @@ module.exports = function (element, axis, value) {
   if (typeof value === 'undefined') {
     throw 'You must provide a value to the update-scroll function';
   }
-
-  if (axis === 'top' && value <= 0) {
-    element.scrollTop = value = 0; // don't allow negative scroll
-    element.dispatchEvent(createDOMEvent('ps-y-reach-start'));
-  } else {
-    element.dispatchEvent(createDOMEvent('ps-y-reach-start-more'));
-  }
-
-  if (axis === 'left' && value <= 0) {
-    element.scrollLeft = value = 0; // don't allow negative scroll
-    element.dispatchEvent(createDOMEvent('ps-x-reach-start'));
-  } else {
-    element.dispatchEvent(createDOMEvent('ps-x-reach-start-more'));
-  }
-
   var i = instances.get(element);
 
-  if (axis === 'top' && value >= i.contentHeight - i.containerHeight) {
-    // don't allow scroll past container
-    value = i.contentHeight - i.containerHeight;
-    if (value - element.scrollTop <= 1) {
-      // mitigates rounding errors on non-subpixel scroll values
-      value = element.scrollTop;
+  if (axis === 'top') {
+    if (value <= 0) {
+      element.scrollTop = value = 0; // don't allow negative scroll
+      element.dispatchEvent(createDOMEvent('ps-y-reach-start'));
     } else {
-      element.scrollTop = value;
+      element.dispatchEvent(createDOMEvent('ps-y-reach-start-more'));
     }
-    element.dispatchEvent(createDOMEvent('ps-y-reach-end'));
-  } else {
-    element.dispatchEvent(createDOMEvent('ps-y-reach-end-more'));
+    if (value >= i.contentHeight - i.containerHeight) {
+      // don't allow scroll past container
+      value = i.contentHeight - i.containerHeight;
+      if (value - element.scrollTop <= 1) {
+        // mitigates rounding errors on non-subpixel scroll values
+        value = element.scrollTop;
+      } else {
+        element.scrollTop = value;
+      }
+      element.dispatchEvent(createDOMEvent('ps-y-reach-end'));
+    } else {
+      element.dispatchEvent(createDOMEvent('ps-y-reach-end-more'));
+    }
   }
 
-  if (axis === 'left' && value >= i.contentWidth - i.containerWidth) {
-    // don't allow scroll past container
-    value = i.contentWidth - i.containerWidth;
-    if (value - element.scrollLeft <= 1) {
-      // mitigates rounding errors on non-subpixel scroll values
-      value = element.scrollLeft;
+  if (axis === 'left') {
+    if (value <= 0) {
+      element.scrollLeft = value = 0; // don't allow negative scroll
+      element.dispatchEvent(createDOMEvent('ps-x-reach-start'));
     } else {
-      element.scrollLeft = value;
+      element.dispatchEvent(createDOMEvent('ps-x-reach-start-more'));
     }
-    element.dispatchEvent(createDOMEvent('ps-x-reach-end'));
-  } else {
-    element.dispatchEvent(createDOMEvent('ps-x-reach-end-more'));
+    if (value >= i.contentWidth - i.containerWidth) {
+      // don't allow scroll past container
+      value = i.contentWidth - i.containerWidth;
+      if (value - element.scrollLeft <= 1) {
+        // mitigates rounding errors on non-subpixel scroll values
+        value = element.scrollLeft;
+      } else {
+        element.scrollLeft = value;
+      }
+      element.dispatchEvent(createDOMEvent('ps-x-reach-end'));
+    } else {
+      element.dispatchEvent(createDOMEvent('ps-x-reach-end-more'));
+    }
   }
 
   if (!lastTop) {
