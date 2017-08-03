@@ -57,6 +57,8 @@ function Instance(element) {
   dom.css(i.scrollbarXRail, 'display', '');
   i.railXWidth = null;
   i.railXRatio = null;
+  cls.add(element, 'ps-x-reach-end-more');
+
 
   i.scrollbarYRail = dom.appendTo(dom.e('div', 'ps-scrollbar-y-rail'), element);
   i.scrollbarY = dom.appendTo(dom.e('div', 'ps-scrollbar-y'), i.scrollbarYRail);
@@ -76,6 +78,7 @@ function Instance(element) {
   dom.css(i.scrollbarYRail, 'display', '');
   i.railYHeight = null;
   i.railYRatio = null;
+  cls.add(element, 'ps-y-reach-end-more');
 
 
   // Shadows

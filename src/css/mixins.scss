@@ -156,28 +156,28 @@
     }
   }
 
-  &.ps-active-x > .ps-shadow-x-left{
+  &.ps-active-x > .ps-shadow-x-left {
     @include shadow-left();
   }
-  &.ps-active-x > .ps-shadow-x-right{
+  &.ps-active-x > .ps-shadow-x-right {
     @include shadow-right();
   }
-  &.ps-active-y > .ps-shadow-y-top{
+  &.ps-active-y > .ps-shadow-y-top {
     @include shadow-top();
   }
-  &.ps-active-y > .ps-shadow-y-bottom{
+  &.ps-active-y > .ps-shadow-y-bottom {
     @include shadow-bottom();
   }
-  &.ps-active-x.ps-x-reach-start-more > .ps-shadow-x-left{
+  &.ps-active-x.ps-x-reach-start-more > .ps-shadow-x-left {
     @include shadow-left-active();
   }
-  &.ps-active-x.ps-x-reach-end-more > .ps-shadow-x-right{
+  &.ps-active-x.ps-x-reach-end-more > .ps-shadow-x-right {
     @include shadow-right-active();
   }
-  &.ps-active-y.ps-y-reach-start-more > .ps-shadow-y-top{
+  &.ps-active-y.ps-y-reach-start-more > .ps-shadow-y-top {
     @include shadow-top-active();
   }
-  &.ps-active-y.ps-y-reach-end-more > .ps-shadow-y-bottom{
+  &.ps-active-y.ps-y-reach-end-more > .ps-shadow-y-bottom {
     @include shadow-bottom-active();
   }
 
