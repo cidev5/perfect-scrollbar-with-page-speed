@@ -26,16 +26,18 @@ var clone = exports.clone = function (obj) {
 exports.extend = function (original, source) {
   var result = clone(original);
   for (var key in source) {
-    result[key] = clone(source[key]);
+    if (typeof result[key] !== 'undefined') {
+      result[key] = clone(source[key]);
+    }
   }
   return result;
 };
 
 exports.isEditable = function (el) {
   return dom.matches(el, "input,[contenteditable]") ||
-         dom.matches(el, "select,[contenteditable]") ||
-         dom.matches(el, "textarea,[contenteditable]") ||
-         dom.matches(el, "button,[contenteditable]");
+    dom.matches(el, "select,[contenteditable]") ||
+    dom.matches(el, "textarea,[contenteditable]") ||
+    dom.matches(el, "button,[contenteditable]");
 };
 
 exports.removePsClasses = function (element) {
@@ -50,10 +52,10 @@ exports.removePsClasses = function (element) {
 
 exports.outerWidth = function (element) {
   return toInt(dom.css(element, 'width')) +
-         toInt(dom.css(element, 'paddingLeft')) +
-         toInt(dom.css(element, 'paddingRight')) +
-         toInt(dom.css(element, 'borderLeftWidth')) +
-         toInt(dom.css(element, 'borderRightWidth'));
+    toInt(dom.css(element, 'paddingLeft')) +
+    toInt(dom.css(element, 'paddingRight')) +
+    toInt(dom.css(element, 'borderLeftWidth')) +
+    toInt(dom.css(element, 'borderRightWidth'));
 };
 
 exports.startScrolling = function (element, axis) {
@@ -80,4 +82,49 @@ exports.env = {
   isWebKit: 'WebkitAppearance' in document.documentElement.style,
   supportsTouch: (('ontouchstart' in window) || window.DocumentTouch && document instanceof window.DocumentTouch),
   supportsIePointer: window.navigator.msMaxTouchPoints !== null
+};
+
+// Returns a function, that, when invoked, will only be triggered at most once
+// during a given window of time. Normally, the throttled function will run
+// as much as it can, without ever going more than once per `wait` duration;
+// but if you'd like to disable the execution on the leading edge, pass
+// `{leading: false}`. To disable execution on the trailing edge, ditto.
+exports.throttle = function (func, wait, options) {
+  var context, args, result;
+  var timeout = null;
+  var previous = 0;
+  if (!options) {
+    options = {};
+  }
+  var later = function () {
+    previous = options.leading === false ? 0 : Date.now();
+    timeout = null;
+    result = func.apply(context, args);
+    if (!timeout) {
+      context = args = null;
+    }
+  };
+  return function () {
+    var now = Date.now();
+    if (!previous && options.leading === false) {
+      previous = now;
+    }
+    var remaining = wait - (now - previous);
+    context = this;
+    args = arguments;
+    if (remaining <= 0 || remaining > wait) {
+      if (timeout) {
+        clearTimeout(timeout);
+        timeout = null;
+      }
+      previous = now;
+      result = func.apply(context, args);
+      if (!timeout) {
+        context = args = null;
+      }
+    } else if (!timeout && options.trailing !== false) {
+      timeout = setTimeout(later, remaining);
+    }
+    return result;
+  };
 };

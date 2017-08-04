@@ -17,7 +17,7 @@ function getThumbSize(i, thumbSize) {
 }
 
 function updateCss(element, i) {
-  var xRailOffset = {width: i.railXWidth};
+  var xRailOffset = { width: i.railXWidth };
   if (i.isRtl) {
     xRailOffset.left = i.negativeScrollAdjustment + element.scrollLeft + i.containerWidth - i.contentWidth;
   } else {
@@ -30,7 +30,7 @@ function updateCss(element, i) {
   }
   dom.css(i.scrollbarXRail, xRailOffset);
 
-  var yRailOffset = {top: element.scrollTop, height: i.railYHeight};
+  var yRailOffset = { top: element.scrollTop, height: i.railYHeight };
   if (i.isScrollbarYUsingRight) {
     if (i.isRtl) {
       yRailOffset.right = i.contentWidth - (i.negativeScrollAdjustment + element.scrollLeft) - i.scrollbarYRight - i.scrollbarYOuterWidth;
@@ -46,14 +46,14 @@ function updateCss(element, i) {
   }
   dom.css(i.scrollbarYRail, yRailOffset);
 
-  dom.css(i.scrollbarX, {left: i.scrollbarXLeft, width: i.scrollbarXWidth - i.railBorderXWidth});
-  dom.css(i.scrollbarY, {top: i.scrollbarYTop, height: i.scrollbarYHeight - i.railBorderYWidth});
+  dom.css(i.scrollbarX, { left: i.scrollbarXLeft, width: i.scrollbarXWidth - i.railBorderXWidth });
+  dom.css(i.scrollbarY, { top: i.scrollbarYTop, height: i.scrollbarYHeight - i.railBorderYWidth });
 }
 
-function updateShadowCss(element, i) {
+function updateShadowCss(element, i, e, elements) {
   var width = _.toInt(dom.css(element, 'width'));
-  var shadowYTop = {width: width};
-  var shadowYBottom = {width: width};
+  var shadowYTop = { width: width };
+  var shadowYBottom = { width: width };
   shadowYTop.left = element.scrollLeft;
   shadowYBottom.left = element.scrollLeft;
   shadowYTop.top = _.toInt(dom.css(i.scrollbarYRail, 'top'));
@@ -63,17 +63,49 @@ function updateShadowCss(element, i) {
   dom.css(i.shadowYBottom, shadowYBottom);
 
   var height = _.toInt(dom.css(element, 'height'));
-  var shadowXLeft = {top: element.scrollTop, height: height};
-  var shadowXRight = {top: element.scrollTop, height: height};
+  var shadowXLeft = { top: element.scrollTop, height: height };
+  var shadowXRight = { top: element.scrollTop, height: height };
   shadowXLeft.left = _.toInt(dom.css(i.scrollbarXRail, 'left'));
   shadowXRight.right = -element.scrollLeft;
 
   dom.css(i.shadowXLeft, shadowXLeft);
   dom.css(i.shadowXRight, shadowXRight);
+
+  if (typeof elements !== 'undefined') {
+    for (var j = 0; j < elements.length; j++) {
+      var extraHeight = _.toInt(dom.css(elements[j], 'height'));
+      var extraShadowXLeft = { top: elements[j].scrollTop, height: extraHeight };
+      var extraShadowXRight = { top: elements[j].scrollTop, height: extraHeight };
+      extraShadowXLeft.left = shadowXLeft.left;
+      extraShadowXRight.right = shadowXRight.right;
+      dom.css(e[j].elementLeft, extraShadowXLeft);
+      dom.css(e[j].elementRight, extraShadowXRight);
+
+      if (i.scrollbarXActive) {
+        cls.add(elements[j], 'ps-active-x');
+      } else {
+        cls.remove(elements[j], 'ps-active-x');
+        updateScroll(elements[j], 'left', 0);
+      }
+      if (i.scrollbarYActive) {
+        cls.add(elements[j], 'ps-active-y');
+      } else {
+        cls.remove(elements[j], 'ps-active-y');
+        updateScroll(elements[j], 'top', 0);
+      }
+    }
+  }
 }
 
-module.exports = function (element) {
+module.exports = function (element, elements) {
   var i = instances.get(element);
+  var e = [];
+
+  if (elements) {
+    for (var j = 0; j < elements.length; j++) {
+      e.push(instances.get(elements[j]));
+    }
+  }
 
   i.containerWidth = element.clientWidth;
   i.containerHeight = element.clientHeight;
@@ -129,7 +161,7 @@ module.exports = function (element) {
 
   updateCss(element, i);
   if (i.settings.scrollAwareShadows) {
-    updateShadowCss(element, i);
+    updateShadowCss(element, i, e, elements);
   }
 
   if (i.scrollbarXActive) {

@@ -33,6 +33,18 @@ exports.remove = function (element, className) {
   }
 };
 
+exports.addMulti = function (elements, className) {
+  for (var i = 0; i < elements.length; i++) {
+    elements[i].classList.add(className);
+  }
+};
+
+exports.removeMulti = function (elements, className) {
+  for (var i = 0; i < elements.length; i++) {
+    elements[i].classList.remove(className);
+  }
+};
+
 exports.list = function (element) {
   if (element.classList) {
     return Array.prototype.slice.apply(element.classList);

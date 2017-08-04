@@ -1,0 +1,55 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta http-equiv="content-type" content="text/html; charset=utf-8">
+    <title>perfect-scrollbar example</title>
+    <link href="../dist/css/perfect-scrollbar.css" rel="stylesheet">
+    <script src="../dist/js/perfect-scrollbar.js"></script>
+    <style>
+      .contentHolder { position:relative; margin:0px auto; padding:0px; width: 600px; height: 400px; overflow: auto; }
+      .asideHolder { position:relative; margin:0px auto; padding:0px; width: 600px; height: 120px; overflow: auto; }
+      .contentHolder .content { background-image: url('./azusa.jpg'); width: 1280px; height: 720px; }
+      .asideHolder .aside { background-image: url('./azusa.jpg'); width: 1280px; height: 120px; }
+      .spacer { text-align:center }
+    </style>
+  </head>
+  <body>
+    <h1 style="text-align:center">Scroll Aware Shadows; scrollAwareShadows:true, extraShadowContainers:null</h1>
+    <div class="asideHolder">
+      <div class="aside">
+      </div>
+    </div>
+    <div id="Default" class="contentHolder">
+      <div class="content">
+      </div>
+    </div>
+    <div class="asideHolder">
+      <div class="aside">
+      </div>
+    </div>
+    <h1 style="text-align:center">Scroll Aware Shadows with Extra Containers; scrollAwareShadows:true, extraShadowContainers:[Elements]</h1>
+    <div id="ScrollAwareShadowsTop" class="asideHolder">
+      <div class="aside">
+      </div>
+    </div>
+    <div id="ScrollAwareShadows" class="contentHolder">
+      <div class="content">
+      </div>
+    </div>
+    <div id="ScrollAwareShadowsBottom" class="asideHolder">
+      <div class="aside">
+      </div>
+    </div>
+    <script>
+      var $ = document.querySelector.bind(document);
+      window.onload = function () {
+        Ps.initialize($('#Default'), {scrollAwareShadows: true});
+        Ps.initialize($('#ScrollAwareShadows'), {
+          scrollAwareShadows: true,
+          extraShadowContainers: [$('#ScrollAwareShadowsTop'), $('#ScrollAwareShadowsBottom')],
+        });
+      };
+    </script>
+  </body>
+</html>
+
