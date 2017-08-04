@@ -50,7 +50,7 @@ function updateCss(element, i) {
   dom.css(i.scrollbarY, { top: i.scrollbarYTop, height: i.scrollbarYHeight - i.railBorderYWidth });
 }
 
-function updateShadowCss(element, i, e, elements) {
+function updateShadowCss(element, i, e, el, elements, elementsLeft) {
   var width = _.toInt(dom.css(element, 'width'));
   var shadowYTop = { width: width };
   var shadowYBottom = { width: width };
@@ -87,11 +87,23 @@ function updateShadowCss(element, i, e, elements) {
         cls.remove(elements[j], 'ps-active-x');
         updateScroll(elements[j], 'left', 0);
       }
-      if (i.scrollbarYActive) {
-        cls.add(elements[j], 'ps-active-y');
-      } else {
-        cls.remove(elements[j], 'ps-active-y');
-        updateScroll(elements[j], 'top', 0);
+    }
+    if (typeof elementsLeft !== 'undefined') {
+      for (var k = 0; k < elementsLeft.length; k++) {
+        var extraWidth = _.toInt(dom.css(elementsLeft[k], 'width'));
+        var extraShadowYTop = { width: extraWidth };
+        var extraShadowYBottom = { width: extraWidth };
+        extraShadowYTop.top = _.toInt(dom.css(i.scrollbarYRail, 'top'));
+        extraShadowYBottom.bottom = -element.scrollTop;
+        dom.css(el[k].elementTop, extraShadowYTop);
+        dom.css(el[k].elementBottom, extraShadowYBottom);
+
+        if (i.scrollbarYActive) {
+          cls.add(elementsLeft[k], 'ps-active-y');
+        } else {
+          cls.remove(elementsLeft[k], 'ps-active-y');
+          updateScroll(elementsLeft[k], 'top', 0);
+        }
       }
     }
   }
@@ -100,10 +112,18 @@ function updateShadowCss(element, i, e, elements) {
 module.exports = function (element, elements) {
   var i = instances.get(element);
   var e = [];
+  var el = [];
 
-  if (elements) {
-    for (var j = 0; j < elements.length; j++) {
-      e.push(instances.get(elements[j]));
+  if (elements && elements.top) {
+    var top = elements.top;
+    for (var j = 0; j < top.length; j++) {
+      e.push(instances.get(top[j]));
+    }
+    if (elements.left) {
+      var left = elements.left;
+      for (var k = 0; k < left.length; k++) {
+        el.push(instances.get(left[k]));
+      }
     }
   }
 
@@ -161,7 +181,11 @@ module.exports = function (element, elements) {
 
   updateCss(element, i);
   if (i.settings.scrollAwareShadows) {
-    updateShadowCss(element, i, e, elements);
+    if (elements) {
+      updateShadowCss(element, i, e, el, elements.top, elements.left);
+    } else {
+      updateShadowCss(element, i, e);
+    }
   }
 
   if (i.scrollbarXActive) {

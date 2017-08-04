@@ -11,10 +11,21 @@
       .contentHolder .content { background-image: url('./azusa.jpg'); width: 1280px; height: 720px; }
       .asideHolder .aside { background-image: url('./azusa.jpg'); width: 1280px; height: 120px; }
       .spacer { text-align:center }
+      .container { float:left }
+      .container-left .asideHolder, .container-left .contentHolder,
+      .container-right .asideHolder, .container-right .contentHolder {
+        width: 200px;
+      }
+      .wrapper{
+        margin: 0 auto;
+        width: 1012px;
+      }
     </style>
   </head>
   <body>
+
     <h1 style="text-align:center">Scroll Aware Shadows; scrollAwareShadows:true, extraShadowContainers:null</h1>
+    
     <div class="asideHolder">
       <div class="aside">
       </div>
@@ -27,26 +38,64 @@
       <div class="aside">
       </div>
     </div>
-    <h1 style="text-align:center">Scroll Aware Shadows with Extra Containers; scrollAwareShadows:true, extraShadowContainers:[Elements]</h1>
-    <div id="ScrollAwareShadowsTop" class="asideHolder">
-      <div class="aside">
+
+    <h1 style="text-align:center">Scroll Aware Shadows with Extra Containers; scrollAwareShadows:true, extraShadowContainers: top: [Elements], left: [Elements]</h1>
+
+    <div class="wrapper">
+      <div class="container container-left">
+        <div id="ScrollAwareShadowsLeftTop" class="asideHolder">
+          <div class="aside">
+          </div>
+        </div>
+        <div id="ScrollAwareShadowsLeft" class="contentHolder">
+          <div class="content">
+          </div>
+        </div>
+        <div id="ScrollAwareShadowsLeftBottom" class="asideHolder">
+          <div class="aside">
+          </div>
+        </div>
+      </div>
+      <div class="container">
+        <div id="ScrollAwareShadowsTop" class="asideHolder">
+          <div class="aside">
+          </div>
+        </div>
+        <div id="ScrollAwareShadows" class="contentHolder">
+          <div class="content">
+          </div>
+        </div>
+        <div id="ScrollAwareShadowsBottom" class="asideHolder">
+          <div class="aside">
+          </div>
+        </div>
+      </div>
+      <div class="container container-right">
+        <div id="ScrollAwareShadowsRightTop" class="asideHolder">
+          <div class="aside">
+          </div>
+        </div>
+        <div id="ScrollAwareShadowsRight" class="contentHolder">
+          <div class="content">
+          </div>
+        </div>
+        <div id="ScrollAwareShadowsRightBottom" class="asideHolder">
+          <div class="aside">
+          </div>
+        </div>
       </div>
     </div>
-    <div id="ScrollAwareShadows" class="contentHolder">
-      <div class="content">
-      </div>
-    </div>
-    <div id="ScrollAwareShadowsBottom" class="asideHolder">
-      <div class="aside">
-      </div>
-    </div>
+
     <script>
       var $ = document.querySelector.bind(document);
       window.onload = function () {
         Ps.initialize($('#Default'), {scrollAwareShadows: true});
         Ps.initialize($('#ScrollAwareShadows'), {
           scrollAwareShadows: true,
-          extraShadowContainers: [$('#ScrollAwareShadowsTop'), $('#ScrollAwareShadowsBottom')],
+          extraShadowContainers: {
+            top: [$('#ScrollAwareShadowsTop'), $('#ScrollAwareShadowsBottom')],
+            left: [$('#ScrollAwareShadowsLeft'), $('#ScrollAwareShadowsRight')]
+          },
         });
       };
     </script>

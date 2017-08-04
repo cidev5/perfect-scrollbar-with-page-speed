@@ -26,6 +26,7 @@ module.exports = function (element, userSettings) {
   // Create a plugin instance.
   var i = instances.add(element);
   var e = [];
+  var el = [];
 
   i.settings = _.extend(i.settings, userSettings);
   cls.add(element, 'ps-theme-' + i.settings.theme);
@@ -38,7 +39,7 @@ module.exports = function (element, userSettings) {
 
   if (i.settings.scrollAwareShadows) {
     if (userSettings.extraShadowContainers) {
-      var elements = userSettings.extraShadowContainers;
+      var elements = userSettings.extraShadowContainers.top;
       bindReachStartEndEventsHandler(element, elements);
       for (var j = 0; j < elements.length; j++) {
         e.push(instances.add(elements[j]));
@@ -48,8 +49,20 @@ module.exports = function (element, userSettings) {
         // Shadows
         e[j].elementLeft = dom.appendTo(dom.e('div', 'ps-shadow-x-left'), elements[j]);
         e[j].elementRight = dom.appendTo(dom.e('div', 'ps-shadow-x-right'), elements[j]);
-        e[j].elementTop = dom.appendTo(dom.e('div', 'ps-shadow-y-top'), elements[j]);
-        e[j].elementBottom = dom.appendTo(dom.e('div', 'ps-shadow-y-bottom'), elements[j]);
+      }
+
+      if (userSettings.extraShadowContainers.left) {
+        var elementsLeft = userSettings.extraShadowContainers.left;
+        bindReachStartEndEventsHandler(element, elementsLeft);
+        for (var k = 0; k < elementsLeft.length; k++) {
+          el.push(instances.add(elementsLeft[k]));
+          cls.add(elementsLeft[k], 'ps-container');
+          cls.add(elementsLeft[k], 'ps-theme-' + i.settings.theme);
+
+          // Shadows
+          el[k].elementTop = dom.appendTo(dom.e('div', 'ps-shadow-y-top'), elementsLeft[k]);
+          el[k].elementBottom = dom.appendTo(dom.e('div', 'ps-shadow-y-bottom'), elementsLeft[k]);
+        }
       }
     } else {
       bindReachStartEndEventsHandler(element);
