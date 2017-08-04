@@ -50,7 +50,7 @@ function updateCss(element, i) {
   dom.css(i.scrollbarY, { top: i.scrollbarYTop, height: i.scrollbarYHeight - i.railBorderYWidth });
 }
 
-function updateShadowCss(element, i, e, el, elements, elementsLeft) {
+function updateShadowCss(element, i, e, elements, axis) {
   var width = _.toInt(dom.css(element, 'width'));
   var shadowYTop = { width: width };
   var shadowYBottom = { width: width };
@@ -72,138 +72,146 @@ function updateShadowCss(element, i, e, el, elements, elementsLeft) {
   dom.css(i.shadowXRight, shadowXRight);
 
   if (typeof elements !== 'undefined') {
-    for (var j = 0; j < elements.length; j++) {
-      var extraHeight = _.toInt(dom.css(elements[j], 'height'));
-      var extraShadowXLeft = { top: elements[j].scrollTop, height: extraHeight };
-      var extraShadowXRight = { top: elements[j].scrollTop, height: extraHeight };
-      extraShadowXLeft.left = shadowXLeft.left;
-      extraShadowXRight.right = shadowXRight.right;
-      dom.css(e[j].elementLeft, extraShadowXLeft);
-      dom.css(e[j].elementRight, extraShadowXRight);
+    if (axis === 'top') {
+      for (var j = 0; j < elements.length; j++) {
+        var extraHeight = _.toInt(dom.css(elements[j], 'height'));
+        var extraShadowXLeft = { top: elements[j].scrollTop, height: extraHeight };
+        var extraShadowXRight = { top: elements[j].scrollTop, height: extraHeight };
+        extraShadowXLeft.left = shadowXLeft.left;
+        extraShadowXRight.right = shadowXRight.right;
+        dom.css(e[j].elementLeft, extraShadowXLeft);
+        dom.css(e[j].elementRight, extraShadowXRight);
 
-      if (i.scrollbarXActive) {
-        cls.add(elements[j], 'ps-active-x');
-      } else {
-        cls.remove(elements[j], 'ps-active-x');
-        updateScroll(elements[j], 'left', 0);
+        if (i.scrollbarXActive) {
+          cls.add(elements[j], 'ps-active-x');
+        } else {
+          cls.remove(elements[j], 'ps-active-x');
+          updateScroll(elements[j], 'left', 0);
+        }
       }
     }
-    if (typeof elementsLeft !== 'undefined') {
-      for (var k = 0; k < elementsLeft.length; k++) {
-        var extraWidth = _.toInt(dom.css(elementsLeft[k], 'width'));
+    if (axis === 'left') {
+      for (var k = 0; k < elements.length; k++) {
+        var extraWidth = _.toInt(dom.css(elements[k], 'width'));
         var extraShadowYTop = { width: extraWidth };
         var extraShadowYBottom = { width: extraWidth };
-        extraShadowYTop.top = elementsLeft[k].scrollTop;
-        extraShadowYBottom.bottom = -elementsLeft[k].scrollTop;
-        dom.css(el[k].elementTop, extraShadowYTop);
-        dom.css(el[k].elementBottom, extraShadowYBottom);
+        extraShadowYTop.top = shadowYTop.top;
+        extraShadowYBottom.bottom = -shadowYBottom.bottom;
+        dom.css(e[k].elementTop, extraShadowYTop);
+        dom.css(e[k].elementBottom, extraShadowYBottom);
 
         if (i.scrollbarYActive) {
-          cls.add(elementsLeft[k], 'ps-active-y');
+          cls.add(elements[k], 'ps-active-y');
         } else {
-          cls.remove(elementsLeft[k], 'ps-active-y');
-          updateScroll(elementsLeft[k], 'top', 0);
+          cls.remove(elements[k], 'ps-active-y');
+          updateScroll(elements[k], 'top', 0);
         }
       }
     }
   }
 }
 
-module.exports = function (element, elements) {
-  var i = instances.get(element);
+module.exports = function (element, elements, axis) {
   var e = [];
-  var el = [];
-
-  if (elements && elements.top) {
-    var top = elements.top;
-    for (var j = 0; j < top.length; j++) {
-      e.push(instances.get(top[j]));
-    }
-    if (elements.left) {
-      var left = elements.left;
-      for (var k = 0; k < left.length; k++) {
-        el.push(instances.get(left[k]));
-      }
-    }
-  }
+  var i = instances.get(element);
 
   i.containerWidth = element.clientWidth;
   i.containerHeight = element.clientHeight;
   i.contentWidth = element.scrollWidth;
   i.contentHeight = element.scrollHeight;
 
-  var existingRails;
-  if (!element.contains(i.scrollbarXRail)) {
-    existingRails = dom.queryChildren(element, '.ps-scrollbar-x-rail');
-    if (existingRails.length > 0) {
-      existingRails.forEach(function (rail) {
-        dom.remove(rail);
-      });
+  if (typeof elements !== 'undefined') {
+    for (var j = 0; j < elements.length; j++) {
+      e.push(instances.get(elements[j]));
     }
-    dom.appendTo(i.scrollbarXRail, element);
-  }
-  if (!element.contains(i.scrollbarYRail)) {
-    existingRails = dom.queryChildren(element, '.ps-scrollbar-y-rail');
-    if (existingRails.length > 0) {
-      existingRails.forEach(function (rail) {
-        dom.remove(rail);
-      });
+
+    if (!i.settings.suppressScrollX && i.containerWidth + i.settings.scrollXMarginOffset < i.contentWidth) {
+      i.scrollbarXActive = true;
+    } else {
+      i.scrollbarXActive = false;
     }
-    dom.appendTo(i.scrollbarYRail, element);
-  }
 
-  if (!i.settings.suppressScrollX && i.containerWidth + i.settings.scrollXMarginOffset < i.contentWidth) {
-    i.scrollbarXActive = true;
-    i.railXWidth = i.containerWidth - i.railXMarginWidth;
-    i.railXRatio = i.containerWidth / i.railXWidth;
-    i.scrollbarXWidth = getThumbSize(i, _.toInt(i.railXWidth * i.containerWidth / i.contentWidth));
-    i.scrollbarXLeft = _.toInt((i.negativeScrollAdjustment + element.scrollLeft) * (i.railXWidth - i.scrollbarXWidth) / (i.contentWidth - i.containerWidth));
+    if (!i.settings.suppressScrollY && i.containerHeight + i.settings.scrollYMarginOffset < i.contentHeight) {
+      i.scrollbarYActive = true;
+    } else {
+      i.scrollbarYActive = false;
+    }
+
   } else {
-    i.scrollbarXActive = false;
+    var existingRails;
+    if (!element.contains(i.scrollbarXRail)) {
+      existingRails = dom.queryChildren(element, '.ps-scrollbar-x-rail');
+      if (existingRails.length > 0) {
+        existingRails.forEach(function (rail) {
+          dom.remove(rail);
+        });
+      }
+      dom.appendTo(i.scrollbarXRail, element);
+    }
+    if (!element.contains(i.scrollbarYRail)) {
+      existingRails = dom.queryChildren(element, '.ps-scrollbar-y-rail');
+      if (existingRails.length > 0) {
+        existingRails.forEach(function (rail) {
+          dom.remove(rail);
+        });
+      }
+      dom.appendTo(i.scrollbarYRail, element);
+    }
+
+    if (!i.settings.suppressScrollX && i.containerWidth + i.settings.scrollXMarginOffset < i.contentWidth) {
+      i.scrollbarXActive = true;
+      i.railXWidth = i.containerWidth - i.railXMarginWidth;
+      i.railXRatio = i.containerWidth / i.railXWidth;
+      i.scrollbarXWidth = getThumbSize(i, _.toInt(i.railXWidth * i.containerWidth / i.contentWidth));
+      i.scrollbarXLeft = _.toInt((i.negativeScrollAdjustment + element.scrollLeft) * (i.railXWidth - i.scrollbarXWidth) / (i.contentWidth - i.containerWidth));
+    } else {
+      i.scrollbarXActive = false;
+    }
+
+    if (!i.settings.suppressScrollY && i.containerHeight + i.settings.scrollYMarginOffset < i.contentHeight) {
+      i.scrollbarYActive = true;
+      i.railYHeight = i.containerHeight - i.railYMarginHeight;
+      i.railYRatio = i.containerHeight / i.railYHeight;
+      i.scrollbarYHeight = getThumbSize(i, _.toInt(i.railYHeight * i.containerHeight / i.contentHeight));
+      i.scrollbarYTop = _.toInt(element.scrollTop * (i.railYHeight - i.scrollbarYHeight) / (i.contentHeight - i.containerHeight));
+    } else {
+      i.scrollbarYActive = false;
+    }
+
+    if (i.scrollbarXLeft >= i.railXWidth - i.scrollbarXWidth) {
+      i.scrollbarXLeft = i.railXWidth - i.scrollbarXWidth;
+    }
+    if (i.scrollbarYTop >= i.railYHeight - i.scrollbarYHeight) {
+      i.scrollbarYTop = i.railYHeight - i.scrollbarYHeight;
+    }
+
+    updateCss(element, i);
+
+    if (i.scrollbarXActive) {
+      cls.add(element, 'ps-active-x');
+    } else {
+      cls.remove(element, 'ps-active-x');
+      i.scrollbarXWidth = 0;
+      i.scrollbarXLeft = 0;
+      updateScroll(element, 'left', 0);
+    }
+    if (i.scrollbarYActive) {
+      cls.add(element, 'ps-active-y');
+    } else {
+      cls.remove(element, 'ps-active-y');
+      i.scrollbarYHeight = 0;
+      i.scrollbarYTop = 0;
+      updateScroll(element, 'top', 0);
+    }
+
   }
 
-  if (!i.settings.suppressScrollY && i.containerHeight + i.settings.scrollYMarginOffset < i.contentHeight) {
-    i.scrollbarYActive = true;
-    i.railYHeight = i.containerHeight - i.railYMarginHeight;
-    i.railYRatio = i.containerHeight / i.railYHeight;
-    i.scrollbarYHeight = getThumbSize(i, _.toInt(i.railYHeight * i.containerHeight / i.contentHeight));
-    i.scrollbarYTop = _.toInt(element.scrollTop * (i.railYHeight - i.scrollbarYHeight) / (i.contentHeight - i.containerHeight));
-  } else {
-    i.scrollbarYActive = false;
-  }
-
-  if (i.scrollbarXLeft >= i.railXWidth - i.scrollbarXWidth) {
-    i.scrollbarXLeft = i.railXWidth - i.scrollbarXWidth;
-  }
-  if (i.scrollbarYTop >= i.railYHeight - i.scrollbarYHeight) {
-    i.scrollbarYTop = i.railYHeight - i.scrollbarYHeight;
-  }
-
-  updateCss(element, i);
   if (i.settings.scrollAwareShadows) {
     if (elements) {
-      updateShadowCss(element, i, e, el, elements.top, elements.left);
+      updateShadowCss(element, i, e, elements, axis);
     } else {
       updateShadowCss(element, i, e);
     }
   }
-
-  if (i.scrollbarXActive) {
-    cls.add(element, 'ps-active-x');
-  } else {
-    cls.remove(element, 'ps-active-x');
-    i.scrollbarXWidth = 0;
-    i.scrollbarXLeft = 0;
-    updateScroll(element, 'left', 0);
-  }
-  if (i.scrollbarYActive) {
-    cls.add(element, 'ps-active-y');
-  } else {
-    cls.remove(element, 'ps-active-y');
-    i.scrollbarYHeight = 0;
-    i.scrollbarYTop = 0;
-    updateScroll(element, 'top', 0);
-  }
-
 
 };
