@@ -10,16 +10,19 @@ $ps-bar-container-hover-bg: #aaa !default;
 $ps-bar-hover-bg: #999 !default;
 $ps-rail-hover-bg: #eee !default;
 
-$ps-shadow-box-color:rgba(0, 0, 0, 0.5) !default;
+$ps-shadow-box-color:rgba(0, 0, 0, 0.15) !default;
+$ps-shadow-spread:15px !default;
+$ps-shadow-distance:75px !default;
+$ps-shadow-distance-neg:-75px !default;
 $ps-shadow-box-inactive-color:rgba(0, 0, 0, 0) !default;
-$ps-shadow-box-left:inset 70px 2px 38px -74px $ps-shadow-box-color !default;
-$ps-shadow-box-left-inactive:inset 70px 2px 38px -74px $ps-shadow-box-inactive-color !default;
-$ps-shadow-box-right:inset -70px 2px 38px -74px $ps-shadow-box-color !default;
-$ps-shadow-box-right-inactive:inset -70px 2px 38px -74px $ps-shadow-box-inactive-color !default;
-$ps-shadow-box-top:inset 0 70px 38px -74px $ps-shadow-box-color !default;
-$ps-shadow-box-top-inactive:inset 0 70px 38px -74px $ps-shadow-box-inactive-color !default;
-$ps-shadow-box-bottom:inset 0 -70px 38px -74px $ps-shadow-box-color !default;
-$ps-shadow-box-bottom-inactive:inset 0 -70px 38px -74px $ps-shadow-box-inactive-color !default;
+$ps-shadow-box-left:inset $ps-shadow-distance 2px $ps-shadow-spread -74px $ps-shadow-box-color !default;
+$ps-shadow-box-left-inactive:inset $ps-shadow-distance 2px $ps-shadow-spread -74px $ps-shadow-box-inactive-color !default;
+$ps-shadow-box-right:inset $ps-shadow-distance-neg 2px $ps-shadow-spread -74px $ps-shadow-box-color !default;
+$ps-shadow-box-right-inactive:inset $ps-shadow-distance-neg 2px $ps-shadow-spread -74px $ps-shadow-box-inactive-color !default;
+$ps-shadow-box-top:inset 0 $ps-shadow-distance $ps-shadow-spread -74px $ps-shadow-box-color !default;
+$ps-shadow-box-top-inactive:inset 0 $ps-shadow-distance $ps-shadow-spread -74px $ps-shadow-box-inactive-color !default;
+$ps-shadow-box-bottom:inset 0 $ps-shadow-distance-neg $ps-shadow-spread -74px $ps-shadow-box-color !default;
+$ps-shadow-box-bottom-inactive:inset 0 $ps-shadow-distance-neg $ps-shadow-spread -74px $ps-shadow-box-inactive-color !default;
 
     
 
