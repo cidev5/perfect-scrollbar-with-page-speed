@@ -93,8 +93,8 @@ function updateShadowCss(element, i, e, el, elements, elementsLeft) {
         var extraWidth = _.toInt(dom.css(elementsLeft[k], 'width'));
         var extraShadowYTop = { width: extraWidth };
         var extraShadowYBottom = { width: extraWidth };
-        extraShadowYTop.top = _.toInt(dom.css(i.scrollbarYRail, 'top'));
-        extraShadowYBottom.bottom = -element.scrollTop;
+        extraShadowYTop.top = elementsLeft[k].scrollTop;
+        extraShadowYBottom.bottom = -elementsLeft[k].scrollTop;
         dom.css(el[k].elementTop, extraShadowYTop);
         dom.css(el[k].elementBottom, extraShadowYBottom);
 
