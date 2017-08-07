@@ -52,8 +52,8 @@ function updateCss(element, i) {
 
 function updateShadowCss(element, i, e, elements, axis) {
   var width = _.toInt(dom.css(element, 'width'));
-  var shadowYTop = { width: width };
-  var shadowYBottom = { width: width };
+  var shadowYTop = { width: width, left: null, top: null };
+  var shadowYBottom = { width: width, left: null, bottom: null };
   shadowYTop.left = element.scrollLeft;
   shadowYBottom.left = element.scrollLeft;
   shadowYTop.top = _.toInt(dom.css(i.scrollbarYRail, 'top'));
@@ -63,8 +63,8 @@ function updateShadowCss(element, i, e, elements, axis) {
   dom.css(i.shadowYBottom, shadowYBottom);
 
   var height = _.toInt(dom.css(element, 'height'));
-  var shadowXLeft = { top: element.scrollTop, height: height };
-  var shadowXRight = { top: element.scrollTop, height: height };
+  var shadowXLeft = { top: element.scrollTop, height: height, left: null };
+  var shadowXRight = { top: element.scrollTop, height: height, right: null };
   shadowXLeft.left = _.toInt(dom.css(i.scrollbarXRail, 'left'));
   shadowXRight.right = -element.scrollLeft;
 
@@ -75,10 +75,8 @@ function updateShadowCss(element, i, e, elements, axis) {
     if (axis === 'top') {
       for (var j = 0; j < elements.length; j++) {
         var extraHeight = _.toInt(dom.css(elements[j], 'height'));
-        var extraShadowXLeft = { top: elements[j].scrollTop, height: extraHeight };
-        var extraShadowXRight = { top: elements[j].scrollTop, height: extraHeight };
-        extraShadowXLeft.left = shadowXLeft.left;
-        extraShadowXRight.right = shadowXRight.right;
+        var extraShadowXLeft = { top: elements[j].scrollTop, height: extraHeight, left: shadowXLeft.left };
+        var extraShadowXRight = { top: elements[j].scrollTop, height: extraHeight, right: shadowXRight.right};
         dom.css(e[j].elementLeft, extraShadowXLeft);
         dom.css(e[j].elementRight, extraShadowXRight);
 
@@ -93,10 +91,8 @@ function updateShadowCss(element, i, e, elements, axis) {
     if (axis === 'left') {
       for (var k = 0; k < elements.length; k++) {
         var extraWidth = _.toInt(dom.css(elements[k], 'width'));
-        var extraShadowYTop = { width: extraWidth };
-        var extraShadowYBottom = { width: extraWidth };
-        extraShadowYTop.top = shadowYTop.top;
-        extraShadowYBottom.bottom = -shadowYBottom.bottom;
+        var extraShadowYTop = { width: extraWidth, top: shadowYTop.top };
+        var extraShadowYBottom = { width: extraWidth, bottom: shadowYBottom.bottom};
         dom.css(e[k].elementTop, extraShadowYTop);
         dom.css(e[k].elementBottom, extraShadowYBottom);
 

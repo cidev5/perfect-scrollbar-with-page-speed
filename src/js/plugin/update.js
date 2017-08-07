@@ -6,7 +6,7 @@ var instances = require('./instances');
 var updateGeometry = require('./update-geometry');
 var updateScroll = require('./update-scroll');
 
-module.exports = function (element) {
+module.exports = function (element, userSettings) {
   var i = instances.get(element);
 
   if (!i) {
@@ -34,4 +34,14 @@ module.exports = function (element) {
 
   dom.css(i.scrollbarXRail, 'display', '');
   dom.css(i.scrollbarYRail, 'display', '');
+
+
+  if (i.settings.scrollAwareShadows) {
+    if (userSettings.extraShadowContainers) {
+      updateGeometry(element, userSettings.extraShadowContainers.top, 'top');
+      if (userSettings.extraShadowContainers.left) {
+        updateGeometry(element, userSettings.extraShadowContainers.left, 'left');
+      }
+    }
+  }
 };

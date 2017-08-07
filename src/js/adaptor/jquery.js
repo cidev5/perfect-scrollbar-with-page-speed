@@ -4,7 +4,7 @@ var ps = require('../main');
 var psInstances = require('../plugin/instances');
 
 function mountJQuery(jQuery) {
-  jQuery.fn.perfectScrollbar = function (settingOrCommand) {
+  jQuery.fn.perfectScrollbar = function (settingOrCommand, optionalSettings) {
     return this.each(function () {
       if (typeof settingOrCommand === 'object' ||
           typeof settingOrCommand === 'undefined') {
@@ -19,7 +19,7 @@ function mountJQuery(jQuery) {
         var command = settingOrCommand;
 
         if (command === 'update') {
-          ps.update(this);
+          ps.update(this, optionalSettings);
         } else if (command === 'destroy') {
           ps.destroy(this);
         }
