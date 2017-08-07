@@ -37,7 +37,7 @@ module.exports = function (element, userSettings) {
 
 
   if (i.settings.scrollAwareShadows) {
-    if (userSettings.extraShadowContainers) {
+    if (userSettings && userSettings.extraShadowContainers) {
       updateGeometry(element, userSettings.extraShadowContainers.top, 'top');
       if (userSettings.extraShadowContainers.left) {
         updateGeometry(element, userSettings.extraShadowContainers.left, 'left');
