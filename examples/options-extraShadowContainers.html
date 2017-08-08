@@ -4,7 +4,8 @@
     <meta http-equiv="content-type" content="text/html; charset=utf-8">
     <title>perfect-scrollbar example</title>
     <link href="../dist/css/perfect-scrollbar.css" rel="stylesheet">
-    <script src="../dist/js/perfect-scrollbar.js"></script>
+    <script src="http://ajax.googleapis.com/ajax/libs/jquery/1.10.2/jquery.min.js"></script>
+    <script src="../dist/js/perfect-scrollbar.jquery.js"></script>
     <style>
       .contentHolder { position:relative; margin:0px auto; padding:0px; width: 600px; height: 400px; overflow: auto; }
       .asideHolder { position:relative; margin:0px auto; padding:0px; width: 600px; height: 120px; overflow: auto; }
@@ -87,17 +88,29 @@
     </div>
 
     <script>
-      var $ = document.querySelector.bind(document);
-      window.onload = function () {
-        Ps.initialize($('#Default'), {scrollAwareShadows: true});
-        Ps.initialize($('#ScrollAwareShadows'), {
+      var _$ = document.querySelector.bind(document);
+
+      $(document).ready(function ($) {
+        $('#Default').perfectScrollbar({scrollAwareShadows: true});
+        $('#ScrollAwareShadows').perfectScrollbar({
           scrollAwareShadows: true,
           extraShadowContainers: {
-            top: [$('#ScrollAwareShadowsTop'), $('#ScrollAwareShadowsBottom')],
-            left: [$('#ScrollAwareShadowsLeft'), $('#ScrollAwareShadowsRight')]
+            top: [_$('#ScrollAwareShadowsTop'), _$('#ScrollAwareShadowsBottom')],
+            left: [_$('#ScrollAwareShadowsLeft'), _$('#ScrollAwareShadowsRight')]
           },
         });
-      };
+
+        window.addEventListener('resize', function () {
+          $('#ScrollAwareShadows').perfectScrollbar('update', {
+            scrollAwareShadows: true,
+            extraShadowContainers: {
+              top: [_$('#ScrollAwareShadowsTop'), _$('#ScrollAwareShadowsBottom')],
+              left: [_$('#ScrollAwareShadowsLeft'), _$('#ScrollAwareShadowsRight')]
+            },
+          });
+        });
+      });
+
     </script>
   </body>
 </html>

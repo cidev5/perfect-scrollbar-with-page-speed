@@ -75,8 +75,8 @@ function updateShadowCss(element, i, e, elements, axis) {
     if (axis === 'top') {
       for (var j = 0; j < elements.length; j++) {
         var extraHeight = _.toInt(dom.css(elements[j], 'height'));
-        var extraShadowXLeft = { top: elements[j].scrollTop, height: extraHeight, left: shadowXLeft.left };
-        var extraShadowXRight = { top: elements[j].scrollTop, height: extraHeight, right: shadowXRight.right};
+        var extraShadowXLeft = { top: elements[j].scrollTop, height: extraHeight, left: 0 };
+        var extraShadowXRight = { top: elements[j].scrollTop, height: extraHeight, right: 0 };
         dom.css(e[j].elementLeft, extraShadowXLeft);
         dom.css(e[j].elementRight, extraShadowXRight);
 
@@ -91,8 +91,8 @@ function updateShadowCss(element, i, e, elements, axis) {
     if (axis === 'left') {
       for (var k = 0; k < elements.length; k++) {
         var extraWidth = _.toInt(dom.css(elements[k], 'width'));
-        var extraShadowYTop = { width: extraWidth, top: shadowYTop.top };
-        var extraShadowYBottom = { width: extraWidth, bottom: shadowYBottom.bottom};
+        var extraShadowYTop = { width: extraWidth, top: 0 };
+        var extraShadowYBottom = { width: extraWidth, bottom: 0 };
         dom.css(e[k].elementTop, extraShadowYTop);
         dom.css(e[k].elementBottom, extraShadowYBottom);
 
@@ -107,8 +107,7 @@ function updateShadowCss(element, i, e, elements, axis) {
   }
 }
 
-module.exports = function (element, elements, axis) {
-  var e = [];
+module.exports = function (element, elements, e, axis) {
   var i = instances.get(element);
 
   i.containerWidth = element.clientWidth;

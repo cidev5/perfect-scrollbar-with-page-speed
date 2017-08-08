@@ -50,7 +50,7 @@ module.exports = function (element, userSettings) {
         e[j].elementLeft = dom.appendTo(dom.e('div', 'ps-shadow-x-left'), elements[j]);
         e[j].elementRight = dom.appendTo(dom.e('div', 'ps-shadow-x-right'), elements[j]);
       }
-      updateGeometry(element, userSettings.extraShadowContainers.top, 'top');
+      updateGeometry(element, userSettings.extraShadowContainers.top, e, 'top');
 
       if (userSettings.extraShadowContainers.left) {
         var elementsLeft = userSettings.extraShadowContainers.left;
@@ -64,7 +64,7 @@ module.exports = function (element, userSettings) {
           el[k].elementTop = dom.appendTo(dom.e('div', 'ps-shadow-y-top'), elementsLeft[k]);
           el[k].elementBottom = dom.appendTo(dom.e('div', 'ps-shadow-y-bottom'), elementsLeft[k]);
         }
-        updateGeometry(element, userSettings.extraShadowContainers.left, 'left');
+        updateGeometry(element, userSettings.extraShadowContainers.left, el, 'left');
       }
     }
   }

@@ -8,10 +8,13 @@ var updateScroll = require('./update-scroll');
 
 module.exports = function (element, userSettings) {
   var i = instances.get(element);
+  var e = [];
+  var el = [];
 
   if (!i) {
     return;
   }
+
 
   // Recalcuate negative scrollLeft adjustment
   i.negativeScrollAdjustment = i.isNegativeScroll ? element.scrollWidth - element.clientWidth : 0;
@@ -38,9 +41,15 @@ module.exports = function (element, userSettings) {
 
   if (i.settings.scrollAwareShadows) {
     if (userSettings && userSettings.extraShadowContainers) {
-      updateGeometry(element, userSettings.extraShadowContainers.top, 'top');
+      for (var j = 0; j < userSettings.extraShadowContainers.top.length; j++) {
+        e.push(instances.get(userSettings.extraShadowContainers.top[j]));
+      }
+      updateGeometry(element, userSettings.extraShadowContainers.top, e, 'top');
       if (userSettings.extraShadowContainers.left) {
-        updateGeometry(element, userSettings.extraShadowContainers.left, 'left');
+        for (var k = 0; k < userSettings.extraShadowContainers.top.length; k++) {
+          el.push(instances.get(userSettings.extraShadowContainers.left[k]));
+        }
+        updateGeometry(element, userSettings.extraShadowContainers.left, el, 'left');
       }
     }
   }
