@@ -50,7 +50,7 @@ function updateCss(element, i) {
   dom.css(i.scrollbarY, { top: i.scrollbarYTop, height: i.scrollbarYHeight - i.railBorderYWidth });
 }
 
-function updateShadowCss(element, i, e, elements, axis) {
+function updateShadowCss(element, i, e, elements, axis, isUpdate) {
   var width = _.toInt(dom.css(element, 'width'));
   var shadowYTop = { width: width, left: null, top: null };
   var shadowYBottom = { width: width, left: null, bottom: null };
@@ -74,11 +74,13 @@ function updateShadowCss(element, i, e, elements, axis) {
   if (typeof elements !== 'undefined') {
     if (axis === 'top') {
       for (var j = 0; j < elements.length; j++) {
-        var extraHeight = _.toInt(dom.css(elements[j], 'height'));
-        var extraShadowXLeft = { top: elements[j].scrollTop, height: extraHeight, left: 0 };
-        var extraShadowXRight = { top: elements[j].scrollTop, height: extraHeight, right: 0 };
-        dom.css(e[j].elementLeft, extraShadowXLeft);
-        dom.css(e[j].elementRight, extraShadowXRight);
+        if (isUpdate !== true) {
+          var extraHeight = _.toInt(dom.css(elements[j], 'height'));
+          var extraShadowXLeft = { top: elements[j].scrollTop, height: extraHeight, left: 0 };
+          var extraShadowXRight = { top: elements[j].scrollTop, height: extraHeight, right: 0 };
+          dom.css(e[j].elementLeft, extraShadowXLeft);
+          dom.css(e[j].elementRight, extraShadowXRight);
+        }
 
         if (i.scrollbarXActive) {
           cls.add(elements[j], 'ps-active-x');
@@ -90,11 +92,13 @@ function updateShadowCss(element, i, e, elements, axis) {
     }
     if (axis === 'left') {
       for (var k = 0; k < elements.length; k++) {
-        var extraWidth = _.toInt(dom.css(elements[k], 'width'));
-        var extraShadowYTop = { width: extraWidth, top: 0 };
-        var extraShadowYBottom = { width: extraWidth, bottom: 0 };
-        dom.css(e[k].elementTop, extraShadowYTop);
-        dom.css(e[k].elementBottom, extraShadowYBottom);
+        if (isUpdate !== true) {
+          var extraWidth = _.toInt(dom.css(elements[k], 'width'));
+          var extraShadowYTop = { width: extraWidth, top: _.toInt(dom.css(elements[k], 'top')) };
+          var extraShadowYBottom = { width: extraWidth, bottom: _.toInt(dom.css(elements[k], 'bottom')) };
+          dom.css(e[k].elementTop, extraShadowYTop);
+          dom.css(e[k].elementBottom, extraShadowYBottom);
+        }
 
         if (i.scrollbarYActive) {
           cls.add(elements[k], 'ps-active-y');
@@ -107,7 +111,7 @@ function updateShadowCss(element, i, e, elements, axis) {
   }
 }
 
-module.exports = function (element, elements, e, axis) {
+module.exports = function (element, elements, e, axis, isUpdate) {
   var i = instances.get(element);
 
   i.containerWidth = element.clientWidth;
@@ -203,7 +207,7 @@ module.exports = function (element, elements, e, axis) {
 
   if (i.settings.scrollAwareShadows) {
     if (elements) {
-      updateShadowCss(element, i, e, elements, axis);
+      updateShadowCss(element, i, e, elements, axis, isUpdate);
     } else {
       updateShadowCss(element, i, e);
     }

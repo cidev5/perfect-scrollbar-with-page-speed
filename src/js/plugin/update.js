@@ -44,12 +44,12 @@ module.exports = function (element, userSettings) {
       for (var j = 0; j < userSettings.extraShadowContainers.top.length; j++) {
         e.push(instances.get(userSettings.extraShadowContainers.top[j]));
       }
-      updateGeometry(element, userSettings.extraShadowContainers.top, e, 'top');
+      updateGeometry(element, userSettings.extraShadowContainers.top, e, 'top', true);
       if (userSettings.extraShadowContainers.left) {
         for (var k = 0; k < userSettings.extraShadowContainers.top.length; k++) {
           el.push(instances.get(userSettings.extraShadowContainers.left[k]));
         }
-        updateGeometry(element, userSettings.extraShadowContainers.left, el, 'left');
+        updateGeometry(element, userSettings.extraShadowContainers.left, el, 'left', true);
       }
     }
   }
